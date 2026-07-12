@@ -138,9 +138,10 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
