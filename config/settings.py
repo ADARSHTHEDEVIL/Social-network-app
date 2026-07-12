@@ -136,13 +136,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-    },
-}
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
