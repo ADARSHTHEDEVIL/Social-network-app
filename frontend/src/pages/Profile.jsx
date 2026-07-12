@@ -145,10 +145,10 @@ function Profile() {
             <div className="bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-xl p-6 text-center">
               <div className="relative w-24 h-24 mx-auto mb-4 group">
                 <img
-                  src={user.profile_picture || "https://via.placeholder.com/150"}
-                  alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover border-2 border-slate-600"
-                />
+  src={user.profile_picture || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23334155'/%3E%3Ccircle cx='50' cy='35' r='18' fill='%2394a3b8'/%3E%3Cellipse cx='50' cy='85' rx='30' ry='25' fill='%2394a3b8'/%3E%3C/svg%3E"}
+  alt="Profile"
+  className="w-24 h-24 rounded-full object-cover border-2 border-slate-600"
+/>
                 <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer text-white text-xs">
                   Change
                   <input
