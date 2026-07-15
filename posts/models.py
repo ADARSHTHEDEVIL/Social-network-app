@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from cloudinary.models import CloudinaryField
 
 
 class Post(models.Model):
@@ -10,9 +11,20 @@ class Post(models.Model):
     )
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to="post_images/%Y/%m/", blank=True, null=True)
-    document = models.FileField(upload_to="post_documents/%Y/%m/", blank=True, null=True)
+    document = CloudinaryField(
+        "document",
+        resource_type="raw",
+        folder="post_documents",
+        blank=True,
+        null=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Post by {self.author.email} at {self.created_at}"
     class Meta:
         ordering = ["-created_at"]
 
