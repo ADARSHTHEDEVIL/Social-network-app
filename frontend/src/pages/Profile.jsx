@@ -15,6 +15,7 @@
     const [newPostImage, setNewPostImage] = useState(null);
     const [newPostDocument, setNewPostDocument] = useState(null);
     const [posting, setPosting] = useState(false);
+    const [copiedLink, setCopiedLink] = useState(false);
 
     useEffect(() => {
       loadProfile();
@@ -114,11 +115,12 @@
       }
     };
 
-    const handleLogout = () => {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      navigate("/login");
-    };
+   const handleShareProfile = () => {
+    const shareUrl = `${window.location.origin}/u/${user.id}`;
+    navigator.clipboard.writeText(shareUrl);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
 
     if (loading) {
       return (
@@ -131,15 +133,23 @@
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-white">Social Network</h1>
-            <button
-              onClick={handleLogout}
-              className="text-slate-400 hover:text-white text-sm font-medium transition"
-            >
-              Log out
-            </button>
-          </div>
+         <div className="flex justify-between items-center mb-6">
+  <h1 className="text-2xl font-bold text-white">Social Network</h1>
+  <div className="flex items-center gap-4">
+    <button
+      onClick={handleShareProfile}
+      className="text-slate-400 hover:text-white text-sm font-medium transition"
+    >
+      {copiedLink ? "Link copied!" : "Share Profile"}
+    </button>
+    <button
+      onClick={handleLogout}
+      className="text-slate-400 hover:text-white text-sm font-medium transition"
+    >
+      Log out
+    </button>
+  </div>
+</div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Profile Card */}
