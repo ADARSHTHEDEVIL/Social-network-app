@@ -9,12 +9,12 @@ class PostSerializer(serializers.ModelSerializer):
     my_reaction = serializers.SerializerMethodField()
 
     class Meta:
-        model = Post
-        fields = [
-            "id", "author", "author_name", "description", "image",
-            "created_at", "like_count", "dislike_count", "my_reaction"
-        ]
-        read_only_fields = ["id", "author", "created_at"]
+     model = Post
+     fields = [
+        "id", "author", "author_name", "description", "image", "document",
+        "created_at", "like_count", "dislike_count", "my_reaction"
+    ]
+     read_only_fields = ["id", "author", "created_at"]
 
     def get_like_count(self, obj):
         return obj.reactions.filter(reaction_type=PostReaction.LIKE).count()
