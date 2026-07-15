@@ -17,12 +17,13 @@ def post_list_create(request):
         return Response(serializer.data)
 
     if request.method == "POST":
-        serializer = PostSerializer(data=request.data, context={"request": request})
-        if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    serializer = PostSerializer(data=request.data, context={"request": request})
+    if serializer.is_valid():
+        document_file = request.FILES.get("document")
+        post = serializer.save(author=request.user, document=document_file)
+        response_serializer = PostSerializer(post, context={"request": request})
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
