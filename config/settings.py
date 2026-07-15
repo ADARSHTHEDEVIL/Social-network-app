@@ -164,6 +164,8 @@ CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': config('CLOUDINARY_URL', default=None),
 }
 
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
 if config('CLOUDINARY_URL', default=None):
     STORAGES = {
         "default": {
