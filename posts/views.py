@@ -3,9 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Post, PostReaction
-from .serializers import PostSerializer
-
+from .models import Post, PostReaction, Comment
+from .serializers import PostSerializer, CommentSerializer
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
@@ -67,3 +66,38 @@ def react_to_post(request, post_id):
     # No existing reaction -> create new
     PostReaction.objects.create(post=post, user=request.user, reaction_type=reaction_type)
     return Response({"message": "Reaction added"}, status=status.HTTP_201_CREATED)
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def comment_list_create(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        comments = post.comments.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    if request.method == "POST":
+        text = request.data.get("text", "").strip()
+        if not text:
+            return Response({"error": "Comment text cannot be empty"}, status=status.HTTP_400_BAD_REQUEST)
+        comment = Comment.objects.create(post=post, author=request.user, text=text)
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def comment_delete(request, comment_id):
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except Comment.DoesNotExist:
+        return Response({"error": "Comment not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if comment.author != request.user:
+        return Response({"error": "You can only delete your own comments"}, status=status.HTTP_403_FORBIDDEN)
+
+    comment.delete()
+    return Response({"message": "Comment deleted"}, status=status.HTTP_204_NO_CONTENT)    

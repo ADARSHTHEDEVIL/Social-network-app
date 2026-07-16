@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, PostReaction
+from .models import Post, PostReaction, Comment
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -33,3 +33,12 @@ class PostSerializer(serializers.ModelSerializer):
             return None
         reaction = obj.reactions.filter(user=request.user).first()
         return reaction.reaction_type if reaction else None
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source="author.full_name", read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ["id", "post", "author", "author_name", "text", "created_at"]
+        read_only_fields = ["id", "post", "author", "created_at"]
