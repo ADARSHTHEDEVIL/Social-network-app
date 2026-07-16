@@ -16,6 +16,9 @@ function Profile() {
   const [newPostDocument, setNewPostDocument] = useState(null);
   const [posting, setPosting] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [expandedPost, setExpandedPost] = useState(null);
+  const [comments, setComments] = useState({});
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     loadProfile();
@@ -122,6 +125,47 @@ function Profile() {
     navigator.clipboard.writeText(shareUrl);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
+  };
+  const toggleComments = async (postId) => {
+    if (expandedPost === postId) {
+      setExpandedPost(null);
+      return;
+    }
+    setExpandedPost(postId);
+    if (!comments[postId]) {
+      try {
+        const res = await api.get(`/posts/${postId}/comments/`);
+        setComments((prev) => ({ ...prev, [postId]: res.data }));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const handleAddComment = async (postId) => {
+    if (!newComment.trim()) return;
+    try {
+      const res = await api.post(`/posts/${postId}/comments/`, { text: newComment });
+      setComments((prev) => ({
+        ...prev,
+        [postId]: [...(prev[postId] || []), res.data],
+      }));
+      setNewComment("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      await api.delete(`/comments/${commentId}/`);
+      setComments((prev) => ({
+        ...prev,
+        [postId]: prev[postId].filter((c) => c.id !== commentId),
+      }));
+    } catch (err) {
+      console.error(err);
+    }
   };
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -371,28 +415,73 @@ function Profile() {
                 )}
 
                 <div className="flex gap-4 pt-2 border-t border-slate-700/50">
-                  <button
-                    onClick={() => handleReact(post.id, "like")}
-                    className={`flex items-center gap-1.5 text-sm font-medium transition ${
-                      post.my_reaction === "like"
-                        ? "text-indigo-400"
-                        : "text-slate-400 hover:text-indigo-300"
-                    }`}
-                  >
-                    👍 Like {post.like_count > 0 && `(${post.like_count})`}
-                  </button>
-                  <button
-                    onClick={() => handleReact(post.id, "dislike")}
-                    className={`flex items-center gap-1.5 text-sm font-medium transition ${
-                      post.my_reaction === "dislike"
-                        ? "text-red-400"
-                        : "text-slate-400 hover:text-red-300"
-                    }`}
-                  >
-                    👎 Dislike{" "}
-                    {post.dislike_count > 0 && `(${post.dislike_count})`}
-                  </button>
-                </div>
+  <button
+    onClick={() => handleReact(post.id, "like")}
+    className={`flex items-center gap-1.5 text-sm font-medium transition ${
+      post.my_reaction === "like"
+        ? "text-indigo-400"
+        : "text-slate-400 hover:text-indigo-300"
+    }`}
+  >
+    👍 Like {post.like_count > 0 && `(${post.like_count})`}
+  </button>
+  <button
+    onClick={() => handleReact(post.id, "dislike")}
+    className={`flex items-center gap-1.5 text-sm font-medium transition ${
+      post.my_reaction === "dislike"
+        ? "text-red-400"
+        : "text-slate-400 hover:text-red-300"
+    }`}
+  >
+    👎 Dislike{" "}
+    {post.dislike_count > 0 && `(${post.dislike_count})`}
+  </button>
+  <button
+    onClick={() => toggleComments(post.id)}
+    className="flex items-center gap-1.5 text-sm font-medium text-slate-400 hover:text-indigo-300 transition"
+  >
+    💬 Comments {comments[post.id]?.length > 0 && `(${comments[post.id].length})`}
+  </button>
+</div>
+
+{expandedPost === post.id && (
+  <div className="mt-3 pt-3 border-t border-slate-700/50 space-y-3">
+    {(comments[post.id] || []).map((comment) => (
+      <div key={comment.id} className="flex justify-between items-start text-sm">
+        <div>
+          <span className="text-white font-medium">{comment.author_name}</span>{" "}
+          <span className="text-slate-300">{comment.text}</span>
+        </div>
+        {comment.author === user.id && (
+          <button
+            onClick={() => handleDeleteComment(post.id, comment.id)}
+            className="text-slate-500 hover:text-red-400 text-xs ml-2 shrink-0"
+          >
+            Delete
+          </button>
+        )}
+      </div>
+    ))}
+    {(comments[post.id] || []).length === 0 && (
+      <p className="text-slate-500 text-xs">No comments yet.</p>
+    )}
+    <div className="flex gap-2">
+      <input
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleAddComment(post.id)}
+        placeholder="Write a comment..."
+        className="flex-1 px-3 py-1.5 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+      />
+      <button
+        onClick={() => handleAddComment(post.id)}
+        className="text-indigo-400 hover:text-indigo-300 text-sm font-medium px-2"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+)}
               </div>
             ))}
           </div>
