@@ -217,14 +217,31 @@ function Profile() {
         {copiedLink ? "Link copied!" : "Share Profile"}
       </button>
       {showShareMenu && (
-        <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10 overflow-hidden">
-          <button onClick={() => shareToPlatform("whatsapp")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">WhatsApp</button>
-          <button onClick={() => shareToPlatform("facebook")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">Facebook</button>
-          <button onClick={() => shareToPlatform("twitter")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">X (Twitter)</button>
-          <button onClick={() => shareToPlatform("linkedin")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">LinkedIn</button>
-          <button onClick={() => shareToPlatform("telegram")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">Telegram</button>
-          <button onClick={() => shareToPlatform("email")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">Email</button>
-          <button onClick={() => shareToPlatform("copy")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition border-t border-slate-700">Copy Link</button>
+        <div className="absolute right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-10 p-3">
+          <div className="grid grid-cols-4 gap-3">
+            <button onClick={() => shareToPlatform("whatsapp")} title="WhatsApp" className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" /><path d="M12 2C6.477 2 2 6.477 2 12c0 1.9.525 3.68 1.437 5.2L2 22l4.938-1.396A9.94 9.94 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.2a8.17 8.17 0 01-4.393-1.267l-.315-.187-3.107.878.83-3.03-.205-.325A8.174 8.174 0 013.8 12c0-4.53 3.67-8.2 8.2-8.2s8.2 3.67 8.2 8.2-3.67 8.2-8.2 8.2z" /></svg>
+            </button>
+            <button onClick={() => shareToPlatform("facebook")} title="Facebook" className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.128 22 16.991 22 12z" /></svg>
+            </button>
+            <button onClick={() => shareToPlatform("twitter")} title="X (Twitter)" className="w-10 h-10 rounded-full bg-black flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+            </button>
+            <button onClick={() => shareToPlatform("linkedin")} title="LinkedIn" className="w-10 h-10 rounded-full bg-[#0A66C2] flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 11.001-4.124 2.062 2.062 0 01-.001 4.124zM7.114 20.452H3.558V9h3.556v11.452z" /></svg>
+            </button>
+            <button onClick={() => shareToPlatform("telegram")} title="Telegram" className="w-10 h-10 rounded-full bg-[#26A5E4] flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white"><path d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1.109-.537l2.663-2.545 5.518 4.041c1.012.564 1.725.267 1.998-.931L23.98 4.156c.359-1.436-.517-2.107-1.484-1.75L1.114 10.53c-1.407.549-1.386 1.335-.24 1.692l5.443 1.7 12.643-7.98c.595-.394 1.136-.176.691.218" /></svg>
+            </button>
+            <button onClick={() => shareToPlatform("email")} title="Email" className="w-10 h-10 rounded-full bg-slate-600 flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white"><path d="M22 4H2a2 2 0 00-2 2v12a2 2 0 002 2h20a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-10 6L2 8V6l10 6 10-6v2z" /></svg>
+            </button>
+            <button onClick={() => shareToPlatform("copy")} title="Copy Link" className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-white" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>
+            </button>
+          </div>
+          {copiedLink && <p className="text-xs text-green-400 text-center mt-2">Link copied!</p>}
         </div>
       )}
     </div>
