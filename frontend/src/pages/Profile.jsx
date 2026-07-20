@@ -16,6 +16,7 @@ function Profile() {
   const [newPostDocument, setNewPostDocument] = useState(null);
   const [posting, setPosting] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const [expandedPost, setExpandedPost] = useState(null);
   const [comments, setComments] = useState({});
   const [newComment, setNewComment] = useState("");
@@ -120,11 +121,32 @@ function Profile() {
     }
   };
 
-  const handleShareProfile = () => {
-    const shareUrl = `${window.location.origin}/u/${user.id}`;
-    navigator.clipboard.writeText(shareUrl);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
+  const getShareUrl = () => `${window.location.origin}/u/${user.id}`;
+  const getDocumentViewerUrl = (url) => {
+    if (url.toLowerCase().endsWith(".pdf")) {
+      return url;
+    }
+    return `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+  };
+  const shareToPlatform = (platform) => {
+    const url = encodeURIComponent(getShareUrl());
+    const text = encodeURIComponent(`Check out ${user.full_name}'s profile on Social Network`);
+    const links = {
+      whatsapp: `https://wa.me/?text=${text}%20${url}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      twitter: `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+      telegram: `https://t.me/share/url?url=${url}&text=${text}`,
+      email: `mailto:?subject=${text}&body=${url}`,
+    };
+    if (platform === "copy") {
+      navigator.clipboard.writeText(getShareUrl());
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    } else {
+      window.open(links[platform], "_blank");
+    }
+    setShowShareMenu(false);
   };
   const toggleComments = async (postId) => {
     if (expandedPost === postId) {
@@ -187,12 +209,25 @@ function Profile() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-white">Social Network</h1>
           <div className="flex items-center gap-4">
-            <button
-              onClick={handleShareProfile}
-              className="text-slate-400 hover:text-white text-sm font-medium transition"
-            >
-              {copiedLink ? "Link copied!" : "Share Profile"}
-            </button>
+            <div className="relative">
+      <button
+        onClick={() => setShowShareMenu((prev) => !prev)}
+        className="text-slate-400 hover:text-white text-sm font-medium transition"
+      >
+        {copiedLink ? "Link copied!" : "Share Profile"}
+      </button>
+      {showShareMenu && (
+        <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10 overflow-hidden">
+          <button onClick={() => shareToPlatform("whatsapp")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">WhatsApp</button>
+          <button onClick={() => shareToPlatform("facebook")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">Facebook</button>
+          <button onClick={() => shareToPlatform("twitter")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">X (Twitter)</button>
+          <button onClick={() => shareToPlatform("linkedin")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">LinkedIn</button>
+          <button onClick={() => shareToPlatform("telegram")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">Telegram</button>
+          <button onClick={() => shareToPlatform("email")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition">Email</button>
+          <button onClick={() => shareToPlatform("copy")} className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition border-t border-slate-700">Copy Link</button>
+        </div>
+      )}
+    </div>
             <button
               onClick={handleLogout}
               className="text-slate-400 hover:text-white text-sm font-medium transition"
@@ -403,16 +438,15 @@ function Profile() {
                     className="w-full rounded-lg mb-3 max-h-96 object-cover"
                   />
                 )}
-                {post.document && (
-                  <a
-                    href={post.document}
+                {post.document && (<a                 
+                    href={getDocumentViewerUrl(post.document)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 mb-3 px-4 py-2.5 bg-slate-900/50 border border-slate-600 rounded-lg text-indigo-300 hover:text-indigo-200 hover:border-indigo-500 transition text-sm"
                   >
                     📄 View attached document
                   </a>
-                )}
+            )}
 
                 <div className="flex gap-4 pt-2 border-t border-slate-700/50">
   <button
