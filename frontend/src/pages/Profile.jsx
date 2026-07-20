@@ -267,15 +267,24 @@ function Profile() {
                   alt="Profile"
                   className="w-24 h-24 rounded-full object-cover border-2 border-slate-600"
                 />
-                <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer text-white text-xs">
-                  Change
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleProfilePictureChange}
-                  />
-                </label>
+                <div className="absolute inset-0 rounded-full overflow-hidden opacity-0 group-hover:opacity-100 transition flex">
+                  <button
+                    type="button"
+                    onClick={() => user.profile_picture && window.open(user.profile_picture, "_blank")}
+                    className="flex-1 flex items-center justify-center bg-black/60 hover:bg-black/70 text-white text-[10px] font-medium transition"
+                  >
+                    View
+                  </button>
+                  <label className="flex-1 flex items-center justify-center bg-black/60 hover:bg-black/70 text-white text-[10px] font-medium cursor-pointer transition">
+                    Change
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleProfilePictureChange}
+                    />
+                  </label>
+                </div>
               </div>
 
               {/* Full Name - editable */}
