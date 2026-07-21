@@ -11,6 +11,9 @@ function Chat() {
   const [locked, setLocked] = useState(true);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
+  const [showNewChat, setShowNewChat] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const pollRef = useRef(null);
 
   const CHAT_PIN = localStorage.getItem("chat_pin") || "";
@@ -37,6 +40,7 @@ function Chat() {
       console.error(err);
     }
   };
+  
 
   const loadMessages = async (userId) => {
     try {
@@ -120,7 +124,13 @@ function Chat() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-white">Messages</h1>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            <button
+              onClick={() => setShowNewChat((prev) => !prev)}
+              className="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition"
+            >
+              + New Message
+            </button>
             <button
               onClick={() => setLocked(true)}
               className="text-slate-400 hover:text-white text-sm font-medium transition"
@@ -139,6 +149,26 @@ function Chat() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[70vh]">
           {/* Conversation list */}
           <div className="bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-xl p-4 overflow-y-auto">
+            {showNewChat && (
+              <div className="mb-3 pb-3 border-b border-slate-700/50">
+                <input
+                  value={searchQuery}
+                  onChange={(e) => searchUsers(e.target.value)}
+                  placeholder="Search by name or email..."
+                  className="w-full px-3 py-2 bg-slate-900/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition mb-2"
+                  autoFocus
+                />
+                {searchResults.map((u) => (
+                  <button
+                    key={u.id}
+                    onClick={() => startNewChat(u)}
+                    className="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-200 hover:bg-slate-700/50 transition"
+                  >
+                    {u.full_name} <span className="text-slate-500 text-xs">{u.email}</span>
+                  </button>
+                ))}
+              </div>
+            )}
             {conversations.length === 0 && (
               <p className="text-slate-500 text-sm text-center py-8">No conversations yet.</p>
             )}

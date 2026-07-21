@@ -118,3 +118,14 @@ def conversations_list(request):
         })
     conversations.sort(key=lambda c: c["last_message_at"] or "", reverse=True)
     return Response(conversations)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def search_users(request):
+    query = request.GET.get("q", "").strip()
+    if not query:
+        return Response([])
+    users = User.objects.filter(
+        models.Q(full_name__icontains=query) | models.Q(email__icontains=query)
+    ).exclude(id=request.user.id)[:10]
+    results = [{"id": u.id, "full_name": u.full_name, "email": u.email} for u in users]
+    return Response(results)
