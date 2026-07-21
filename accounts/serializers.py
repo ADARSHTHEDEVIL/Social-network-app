@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
-from .models import User
+from .models import User,Message
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -50,3 +50,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "full_name", "email", "date_of_birth", "profile_picture", "created_at"]
         read_only_fields = ["id", "email", "created_at"]
+class MessageSerializer(serializers.ModelSerializer):
+    text = serializers.SerializerMethodField()
+    sender_name = serializers.CharField(source="sender.full_name", read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ["id", "sender", "sender_name", "recipient", "text", "created_at", "is_read"]
+        read_only_fields = ["id", "sender", "created_at", "is_read"]
+
+    def get_text(self, obj):
+        return obj.get_text()

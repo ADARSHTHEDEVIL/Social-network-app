@@ -1,5 +1,10 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+﻿from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.conf import settings
 from django.db import models
+from cryptography.fernet import Fernet
+from decouple import config
+
+_cipher = Fernet(config("MESSAGE_ENCRYPTION_KEY").encode())
 
 
 class UserManager(BaseUserManager):
@@ -26,6 +31,7 @@ class UserManager(BaseUserManager):
 def profile_picture_path(instance, filename):
     return f"profile_pictures/{instance.email}/{filename}"
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
@@ -44,3 +50,31 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="sent_messages"
+    )
+    recipient = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="received_messages"
+    )
+    encrypted_text = models.BinaryField(default=b"")
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def set_text(self, plain_text):
+        self.encrypted_text = _cipher.encrypt(plain_text.encode())
+
+    def get_text(self):
+        return _cipher.decrypt(bytes(self.encrypted_text)).decode()
+
+    def __str__(self):
+        return f"{self.sender.email} -> {self.recipient.email} at {self.created_at}"
