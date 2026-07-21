@@ -209,6 +209,12 @@ function Profile() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-white">Social Network</h1>
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate("/chat")}
+              className="text-slate-400 hover:text-white text-sm font-medium transition"
+            >
+              💬 Messages
+            </button>
             <div className="relative">
       <button
         onClick={() => setShowShareMenu((prev) => !prev)}
@@ -225,14 +231,14 @@ function Profile() {
             <button onClick={() => shareToPlatform("facebook")} title="Facebook" className="w-14 h-14 rounded-full bg-[#1877F2] flex items-center justify-center hover:opacity-80 transition">
               <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.128 22 16.991 22 12z" /></svg>
             </button>
-            <button onClick={() => shareToPlatform("twitter")} title="X (Twitter)" className="w-14 h-14 rounded-full bg-black flex items-center justify-center hover:opacity-80 transition">
-              <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.２4H16.１7l-5.２１４-6.８１７L４.９９ ２１．７５H１．６８l７．７３-８．８３５L１．２５４ ２．２５H８．０８l４．７１３ ６．２３１zm-１．１６１ １７．５２h１．８３３L７．０８４ ４．１２６H５．１１７z" /></svg>
+           <button onClick={() => shareToPlatform("twitter")} title="X (Twitter)" className="w-14 h-14 rounded-full bg-black flex items-center justify-center hover:opacity-80 transition">
+              <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
             </button>
-            <button onClick={() => shareToPlatform("linkedin")} title="LinkedIn" className="w-14 h-14 rounded-full bg-[#0A66C₂] flex items-center justify-center hover:opacity-80 transition">
+            <button onClick={() => shareToPlatform("linkedin")} title="LinkedIn" className="w-14 h-14 rounded-full bg-[#0A66C2] flex items-center justify-center hover:opacity-80 transition">
               <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 11.001-4.124 2.062 2.062 0 01-.001 4.124zM7.114 20.452H3.558V9h3.556v11.452z" /></svg>
             </button>
             <button onClick={() => shareToPlatform("telegram")} title="Telegram" className="w-14 h-14 rounded-full bg-[#26A5E4] flex items-center justify-center hover:opacity-80 transition">
-              <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1。109-.537l2。663-2。545 5。518 4。041c1。012。564 1。725。267 1。998-.931L23。98 4。156c。359-1。436-.517-2。１０７-１。４８４-１。７５L１。１１４ １０。５３c-１。４０７。５４９-１。３８６ １。３３５-.２４ １。６９２l５。４４３ １。７ １２。６４３-７。９８c。５９５-.３９４ １。１３６-.１７６;.６９１;.２１８" /></svg>
+              <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1.109-.537l2.663-2.545 5.518 4.041c1.012.564 1.725.267 1.998-.931L23.98 4.156c.359-1.436-.517-2.107-1.484-1.75L1.114 10.53c-1.407.549-1.386 1.335-.24 1.692l5.443 1.7 12.643-7.98c.595-.394 1.136-.176.691.218" /></svg>
             </button>
             <button onClick={() => shareToPlatform("email")} title="Email" className="w-14 h-14 rounded-full bg-slate-600 flex items-center justify-center hover:opacity-80 transition">
               <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M22 4H2a2 2 0 00-2 2v12a2 2 0 002 2h20a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-10 6L2 8V6l10 6 10-6v2z" /></svg>
@@ -258,7 +264,7 @@ function Profile() {
           {/* Profile Card */}
           <div className="md:col-span-1">
             <div className="bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-xl p-6 text-center">
-              <div className="relative w-24 h-24 mx-auto mb-4 group">
+              <div className="w-24 h-24 mx-auto mb-2">
                 <img
                   src={
                     user.profile_picture ||
@@ -267,25 +273,27 @@ function Profile() {
                   alt="Profile"
                   className="w-24 h-24 rounded-full object-cover border-2 border-slate-600"
                 />
-                <div className="absolute inset-0 rounded-full overflow-hidden opacity-0 group-hover:opacity-100 transition flex">
-                  <button
-                    type="button"
-                    onClick={() => user.profile_picture && window.open(user.profile_picture, "_blank")}
-                    className="flex-1 flex items-center justify-center bg-black/60 hover:bg-black/70 text-white text-[10px] font-medium transition"
-                  >
-                    View
-                  </button>
-                  <label className="flex-1 flex items-center justify-center bg-black/60 hover:bg-black/70 text-white text-[10px] font-medium cursor-pointer transition">
-                    Change
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleProfilePictureChange}
-                    />
-                  </label>
-                </div>
               </div>
+              <div className="flex justify-center gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => user.profile_picture && window.open(user.profile_picture, "_blank")}
+                  className="text-xs text-slate-400 hover:text-indigo-300 font-medium transition"
+                >
+                  View
+                </button>
+                <span className="text-slate-600 text-xs">|</span>
+                <label className="text-xs text-slate-400 hover:text-indigo-300 font-medium cursor-pointer transition">
+                  Change
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleProfilePictureChange}
+                  />
+                </label>
+              </div>
+              
 
               {/* Full Name - editable */}
               <div className="group mb-2">
