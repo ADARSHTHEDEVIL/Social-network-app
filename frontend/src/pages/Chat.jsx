@@ -41,6 +41,26 @@ function Chat() {
     }
   };
   
+  const searchUsers = async (query) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    try {
+      const res = await api.get(`/users/search/?q=${encodeURIComponent(query)}`);
+      setSearchResults(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const startNewChat = (user) => {
+    setActiveChat({ user_id: user.id, full_name: user.full_name });
+    setShowNewChat(false);
+    setSearchQuery("");
+    setSearchResults([]);
+  };
 
   const loadMessages = async (userId) => {
     try {
