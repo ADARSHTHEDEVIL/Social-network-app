@@ -12,6 +12,7 @@ function Signup() {
     password: "",
   });
   const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -19,8 +20,14 @@ function Signup() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    setProfilePicture(e.target.files[0]);
+ const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePicture(file);
+    if (file) {
+      setProfilePicturePreview(URL.createObjectURL(file));
+    } else {
+      setProfilePicturePreview(null);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -57,9 +64,19 @@ function Signup() {
           <h1 className="text-2xl font-bold text-white text-center mb-1">
             Join Social Network
           </h1>
-          <p className="text-slate-400 text-center text-sm mb-6">
+          <p className="text-slate-400 text-center text-sm mb-4">
             Create your account to get started
           </p>
+
+          {profilePicturePreview && (
+            <div className="flex justify-center mb-4">
+              <img
+                src={profilePicturePreview}
+                alt="Preview"
+                className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500"
+              />
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
