@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://social-network-backend-a9wg.onrender.com/api",
+  baseURL: "http://127.0.0.1:8000/api",
 });
 
 api.interceptors.request.use((config) => {
@@ -48,7 +48,7 @@ api.interceptors.response.use(
 
       try {
         const res = await axios.post(
-          "https://social-network-backend-a9wg.onrender.com/api/token/refresh/",
+          "http://127.0.0.1:8000/api/token/refresh/",
           { refresh: refreshToken }
         );
         const newAccessToken = res.data.access;
